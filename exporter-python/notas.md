@@ -59,13 +59,28 @@ sufixo _count para indicar que o valor é um contador, ou seja, o valor é incre
 O ponto alto do summary é a excelente precisão e o ponto baixo é a baixa flexibilidades, pois percentuais e as janelas de tempos precisam ser definidos 
 durante a criação da métrica e não é possível agregar métricas do tipo summary com outras métricas do tipo summary durante a criação das queries.
 
+<br>
+
+Criei um container do Prometheus para realizar o monitoramento, expondo a interface web na porta 9090. Utilizei um arquivo de configuração (prometheus.yml) armazenado na minha máquina e configurei um volume persistente (prometheus_data) para garantir que os dados coletados não sejam perdidos caso o container seja reiniciado ou recriado.
+
+Como estou utilizando os exporters e o Prometheus em containers separados, precisei criar uma rede Docker dedicada (monitor-net) para permitir a comunicação entre eles. Após criar a rede, conectei manualmente os containers do Prometheus e dos exporters a essa rede, possibilitando que o Prometheus acesse os endpoints de métricas de cada serviço pelo nome dos containers.
 
 
-
+# Criação do container do prometheus
 docker run -d \
     -p 9090:9090 \
-    -v /caminho/para/prometheus.yml:/etc/prometheus/prometheus.yml \
+    -v /home/tamiris/go/exportes/exporter-python/prometheus.yml:/etc/prometheus/prometheus.yml \
     -v prometheus_data:/prometheus \
     prom/prometheus \
     --config.file=/etc/prometheus/prometheus.yml \
     --storage.tsdb.path=/prometheus
+
+Como estou utilizando containers separados tive que criar uma rede e conectar os conteiners nessa rede
+
+# criando a rede
+docker network create monitor-net
+
+# conectando os containers na rede criada
+docker network connect monitor-net distracted_mclaren
+docker network connect monitor-net segundo-exporter
+docker network connect monitor-net primeiro-exporter
