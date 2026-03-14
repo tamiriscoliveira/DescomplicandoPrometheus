@@ -84,3 +84,151 @@ docker network create monitor-net
 docker network connect monitor-net distracted_mclaren
 docker network connect monitor-net segundo-exporter
 docker network connect monitor-net primeiro-exporter
+
+
+# Funções
+
+A função rate
+A função rate representa a taxa de crescimento por segundo de uma determinada métrica como média, durante um intervalo de tempo.
+
+rate(metrica)[5m]
+ Onde metrica é a métrica que você deseja calcular a taxa de crescimento durante um intervalo de tempo de 5 minutos. Você pode utilizar a função rate para trabalhar com métricas do tipo gauge e counter.
+
+Vamos para um exemplo real:
+
+rate(prometheus_http_requests_total{job="prometheus",handler="/api/v1/query"}[5m])
+ 
+
+Aqui estou calculando a média da taxa de crescimento por segundo da métrica prometheus_http_requests_total, filtrando por job e handler e durante um intervalo de tempo de 5 minutos. Nesse caso eu quero saber o crescimento nas queries que estão sendo feitas no Prometheus.
+
+  
+
+
+A função irate
+A função irate representa a taxa de crescimento por segundo de uma determinada métrica, mas diferentemente da função rate, a função irate não faz a média dos valores, ela pega os dois últimos pontos e calcula a taxa de crescimento. Quando representado em um gráfico, é possível ver a diferença entre a função rate e a função irate, enquanto o gráfico com o rate é mais suave, o gráfico com o irate é mais "pontiagudo", você consegue ver quedas e subidas mais nítidas.
+
+irate(metrica)[5m]
+ 
+
+Onde metrica é a métrica que você deseja calcular a taxa de crescimento, considerando somente os dois últimos pontos, durante um intervalo de tempo de 5 minutos.
+
+Vamos para um exemplo real:
+
+irate(prometheus_http_requests_total{job="prometheus",handler="/api/v1/query"}[5m])
+ 
+
+Aqui estou calculando a taxa de crescimento por segundo da métrica prometheus_http_requests_total, considerando somente os dois últimos pontos, filtrando por job e handler e durante um intervalo de tempo de 5 minutos. Nesse caso eu quero saber o crescimento nas queries que estão sendo feitas no Prometheus.
+
+<br>
+
+A função delta
+A função delta representa a diferença entre o valor atual e o valor anterior de uma métrica. Quando estamos falando de delta estamos falando por exemplo do consumo de um disco. Vamos imaginar que eu queira saber o quando eu usei de disco em um determinado intervalo de tempo, eu posso utilizar a função delta para calcular a diferença entre o valor atual e o valor anterior.
+
+delta(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular a diferença entre o valor atual e o valor anterior, durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+delta(prometheus_http_response_size_bytes_count{job="prometheus",handler="/api/v1/query"}[5m])
+Agora estou calculando a diferença entre o valor atual e o valor anterior da métrica prometheus_http_response_size_bytes_count, filtrando por job e handler e durante um intervalo de tempo de 5 minutos. Nesse caso eu quero saber o quanto de bytes eu estou consumindo nas queries que estão sendo feitas no Prometheus.
+
+  
+
+
+A função increase
+Da mesma forma que a função delta, a função increase representa a diferença entre o primeiro e último valor durante um intervalo de tempo, porém a diferença é que a função increase considera que o valor é um contador, ou seja, o valor é incrementado a cada vez que a métrica é atualizada. Ela começa com o valor 0 e vai somando o valor da métrica a cada atualização. Você já pode imaginar qual o tipo de métrica que ela trabalha, certo? Qual? Counter!
+
+increase(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular a diferença entre o primeiro e último valor durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+increase(prometheus_http_requests_total{job="prometheus",handler="/api/v1/query"}[5m])
+ 
+
+Aqui estou calculando a diferença entre o primeiro e último valor da métrica prometheus_http_requests_total, filtrando por job e handler e durante um intervalo de tempo de 5 minutos.
+
+Você pode acompanhar o resultado dessa query clicando em Graph e depois em Execute, assim você vai ver o gráfico com o resultado da query fazendo mais sentindo.
+
+<br>
+
+
+A função sum
+A função sum representa a soma de todos os valores de uma métrica. Você pode utilizar a função sum nos tipos de dados counter, gauge, histogram e summary. Um exemplo de uso da função sum é quando você quer saber o quanto de memória está sendo utilizada por todos os seus containers, ou o quanto de memória está sendo utilizada por todos os seus pods.
+
+sum(metrica)
+ 
+
+Onde metrica é a métrica que você deseja somar.
+
+ 
+
+Vamos para um exemplo real:
+
+sum(go_memstats_alloc_bytes{job="prometheus"})
+ 
+
+Aqui estou somando todos os valores da métrica go_memstats_alloc_bytes, filtrando por job e durante um intervalo de tempo de 5 minutos.
+
+  
+
+
+A função count
+Outra função bem utilizada é função count representa o contador de uma métrica. Você pode utilizar a função count nos tipos de dados counter, gauge, histogram e summary. Um exemplo de uso da função count é quando você quer saber quantos containers estão rodando em um determinado momento ou quantos de seus pods estão em execução.
+
+count(metrica)
+ 
+
+Onde metrica é a métrica que você deseja contar.
+
+ 
+
+Vamos para um exemplo real:
+
+count(prometheus_http_requests_total)
+ 
+
+Teremos como resultado o número de valores que a métrica prometheus_http_requests_total possui.
+
+
+A função avg
+A função avg representa o valor médio de uma métrica. Você pode utilizar a função avg nos tipos de dados counter, gauge, histogram e summary. Essa é uma das funções mais utilizadas, pois é muito comum você querer saber o valor médio de uma métrica, por exemplo, o valor médio de memória utilizada por um container.
+
+avg(metrica)
+ 
+
+Onde metrica é a métrica que você deseja calcular a média.
+
+  
+
+
+A função min
+A função min representa o valor mínimo de uma métrica. Você pode utilizar a função min nos tipos de dados counter, gauge, histogram e summary. Um exemplo de uso da função min é quando você quer saber qual o menor valor de memória utilizada por um container.
+
+min(metrica)
+ 
+
+Onde metrica é a métrica que você deseja calcular o mínimo.
+
+  
+
+
+A função max
+A função max representa o valor máximo de uma métrica. Um exemplo de uso da função max é quando você quer saber qual o maior valor de memória pelos nodes de um cluster Kubernetes.
+
+max(metrica)
+ 
+
+Onde metrica é a métrica que você deseja calcular o máximo.
+
+
+
+
