@@ -232,3 +232,104 @@ Onde metrica é a métrica que você deseja calcular o máximo.
 
 
 
+A função avg_over_time
+A função avg_over_time representa a média de uma métrica durante um intervalo de tempo. Normalmente utilizada para calcular a média de uma métrica durante um intervalo de tempo, como por exemplo, a média de requisições por segundo durante um intervalo de tempo ou ainda as pessoas que estão no espaço durante o último ano. :D
+
+avg_over_time(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular a média durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+avg_over_time(prometheus_http_requests_total{handler="/api/v1/query"}[5m])
+ 
+
+Agora estou calculando a média da métrica prometheus_http_requests_total, filtrando por handler e durante um intervalo de tempo de 5 minutos.
+
+  
+
+
+A função sum_over_time
+Também temos a função sum_over_time, que representa a soma de uma métrica durante um intervalo de tempo. Vimos a avg_over_time que representa a média, a sum_over_time representa a soma dos valores durante um intervalo de tempo. Imagina calcular a soma de uma métrica durante um intervalo de tempo, como por exemplo, a soma de requisições por segundo durante um intervalo de tempo ou ainda a soma de pessoas que estão no espaço durante o último ano.
+
+sum_over_time(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular a soma durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+sum_over_time(prometheus_http_requests_total{handler="/api/v1/query"}[5m])
+ 
+
+Agora estou calculando a soma da métrica prometheus_http_requests_total, filtrando por handler e durante um intervalo de tempo de 5 minutos.
+
+  
+
+
+A função max_over_time
+A função max_over_time representa o valor máximo de uma métrica durante um intervalo de tempo.
+
+max_over_time(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular o valor máximo durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+max_over_time(prometheus_http_requests_total{handler="/api/v1/query"}[5m])
+ 
+
+Agora estamos buscando o valor máximo da métrica prometheus_http_requests_total, filtrando por handler e durante um intervalo de tempo de 5 minutos.
+
+  
+
+
+A função min_over_time
+A função min_over_time representa o valor mínimo de uma métrica durante um intervalo de tempo.
+
+min_over_time(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular o valor mínimo durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+min_over_time(prometheus_http_requests_total{handler="/api/v1/query"}[5m])
+ 
+
+Agora estamos buscando o valor mínimo da métrica prometheus_http_requests_total, filtrando por handler e durante um intervalo de tempo de 5 minutos.
+
+  
+
+
+A função stddev_over_time
+A função stddev_over_time representa o desvio padrão, que são os valores que estão mais distantes da média, de uma métrica durante um intervalo de tempo. Um bom exemplo seria para o calculo de desvio padrão para saber se houve alguma anomalia no consumo de disco, por exemplo.
+
+stddev_over_time(metrica[5m])
+ 
+
+Onde metrica é a métrica que você deseja calcular o desvio padrão durante um intervalo de tempo de 5 minutos.
+
+ 
+
+Vamos para um exemplo real:
+
+stddev_over_time(prometheus_http_requests_total{handler="/api/v1/query"}[10m])
+ 
+
+Agora estamos buscando os desvios padrões da métrica prometheus_http_requests_total, filtrando por handler e durante um intervalo de tempo de 10 minutos. Vale a pena verificar o gráfico, pois facilita a visualização dos valores.
+
+
+
+
+
